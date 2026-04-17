@@ -8,7 +8,7 @@ USE cp_tracker;
 -- Insert Users
 -- ============================================
 INSERT INTO users (username, email) VALUES
-('john_doe', 'john@example.com'),
+('Anvith', 'anvith320@gmail.com'),
 ('alice_smith', 'alice@example.com'),
 ('bob_wilson', 'bob@example.com');
 
@@ -16,7 +16,7 @@ INSERT INTO users (username, email) VALUES
 -- Insert Problems
 -- ============================================
 INSERT INTO problems (user_id, title, platform, difficulty, status, solved_date, attempts, notes) VALUES
--- User 1 (john_doe) problems
+-- User 1 (Anvith) problems
 (1, 'Two Sum', 'LeetCode', 'EASY', 'SOLVED', '2024-01-15', 1, 'Used HashMap approach'),
 (1, 'Add Two Numbers', 'LeetCode', 'MEDIUM', 'SOLVED', '2024-01-16', 2, 'Linked list problem'),
 (1, 'Longest Substring', 'LeetCode', 'MEDIUM', 'ATTEMPTED', NULL, 3, 'Need to review sliding window'),

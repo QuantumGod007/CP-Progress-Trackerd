@@ -31,7 +31,7 @@ CREATE TABLE problems (
     title VARCHAR(200) NOT NULL,
     platform VARCHAR(50) NOT NULL,
     difficulty ENUM('EASY', 'MEDIUM', 'HARD') NOT NULL,
-    status ENUM('SOLVED', 'ATTEMPTED', 'TODO') NOT NULL,
+    status ENUM('SOLVED', 'ATTEMPTED', 'TODO', 'REVIEW') NOT NULL,
     solved_date DATE,
     attempts INT DEFAULT 1,
     notes TEXT,

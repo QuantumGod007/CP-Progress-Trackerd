@@ -129,7 +129,7 @@ public class CPTrackerGUI extends JFrame {
         panel.add(createLabel("Status:"), gbc);
         
         gbc.gridx = 1; gbc.weightx = 1.0;
-        statusCombo = new JComboBox<>(new String[]{"TODO", "ATTEMPTED", "SOLVED"});
+        statusCombo = new JComboBox<>(new String[]{"TODO", "ATTEMPTED", "SOLVED", "REVIEW"});
         statusCombo.setFont(new Font("Arial", Font.PLAIN, 14));
         panel.add(statusCombo, gbc);
         
@@ -212,12 +212,27 @@ public class CPTrackerGUI extends JFrame {
         JButton markSolvedButton = createActionButton("Mark as Solved", new Color(46, 204, 113));
         markSolvedButton.addActionListener(e -> markProblemAsSolved());
         
+        // NEW: Mark for Review button
+        JButton markReviewButton = createActionButton("Mark for Review", new Color(243, 156, 18));
+        markReviewButton.addActionListener(e -> markProblemForReview());
+        
+        // NEW: View Review Problems button
+        JButton viewReviewButton = createActionButton("View Review", new Color(142, 68, 173));
+        viewReviewButton.addActionListener(e -> viewReviewProblems());
+        
+        // NEW: Remove from Review button
+        JButton removeReviewButton = createActionButton("Remove Review", new Color(52, 73, 94));
+        removeReviewButton.addActionListener(e -> removeFromReview());
+        
         JButton deleteButton = createActionButton("Delete", new Color(231, 76, 60));
         deleteButton.addActionListener(e -> deleteProblem());
         
         buttonPanel.add(refreshButton);
         buttonPanel.add(viewNotesButton);
         buttonPanel.add(markSolvedButton);
+        buttonPanel.add(markReviewButton);  // NEW
+        buttonPanel.add(viewReviewButton);   // NEW
+        buttonPanel.add(removeReviewButton); // NEW
         buttonPanel.add(deleteButton);
         
         panel.add(buttonPanel, BorderLayout.SOUTH);
@@ -509,6 +524,128 @@ public class CPTrackerGUI extends JFrame {
             loadProblems();
             loadProgress();
         }
+    }
+    
+    // NEW: Mark Problem for Review
+    /**
+     * Marks selected problem for review
+     * Updates status to REVIEW using existing updateProblem method
+     */
+    private void markProblemForReview() {
+        int selectedRow = problemsTable.getSelectedRow();
+        
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a problem!", "Selection Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int problemId = (int) tableModel.getValueAt(selectedRow, 0);
+        String currentStatus = (String) tableModel.getValueAt(selectedRow, 4);
+        
+        if (currentStatus.equals("REVIEW")) {
+            JOptionPane.showMessageDialog(this, "Problem is already marked for review!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        // Get the problem and update its status
+        Problem problem = currentProblems.get(selectedRow);
+        problem.setStatus("REVIEW");
+        problemService.updateProblem(problem);
+        
+        JOptionPane.showMessageDialog(this, "Problem marked for review!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        
+        // Refresh table to show updated status
+        loadProblems();
+    }
+    
+    // NEW: View Review Problems
+    /**
+     * Filters and displays only problems marked for REVIEW
+     * Uses existing service method to filter by status
+     */
+    private void viewReviewProblems() {
+        tableModel.setRowCount(0);
+        
+        // Get only REVIEW problems using existing filter method
+        List<Problem> reviewProblems = problemService.getProblemsByStatus(currentUserId, "REVIEW");
+        currentProblems = reviewProblems;
+        
+        if (reviewProblems.isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "No problems marked for review.\nMark problems for review to see them here!", 
+                "No Review Problems", 
+                JOptionPane.INFORMATION_MESSAGE);
+            // Reload all problems
+            loadProblems();
+            return;
+        }
+        
+        // Display review problems in table
+        for (Problem p : reviewProblems) {
+            tableModel.addRow(new Object[]{
+                p.getProblemId(),
+                p.getTitle(),
+                p.getPlatform(),
+                p.getDifficulty(),
+                p.getStatus()
+            });
+        }
+        
+        JOptionPane.showMessageDialog(this, 
+            "Showing " + reviewProblems.size() + " problem(s) marked for review.\nClick 'Refresh' to see all problems.", 
+            "Review Filter Active", 
+            JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    // NEW: Remove from Review
+    /**
+     * Removes REVIEW status from selected problem
+     * Changes status back to ATTEMPTED (can be changed to TODO if preferred)
+     */
+    private void removeFromReview() {
+        int selectedRow = problemsTable.getSelectedRow();
+        
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a problem!", "Selection Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        String currentStatus = (String) tableModel.getValueAt(selectedRow, 4);
+        
+        if (!currentStatus.equals("REVIEW")) {
+            JOptionPane.showMessageDialog(this, "Selected problem is not marked for review!", "Info", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        // Ask user what status to change to
+        String[] options = {"ATTEMPTED", "TODO", "Cancel"};
+        int choice = JOptionPane.showOptionDialog(this,
+            "Change status to:",
+            "Remove from Review",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            options[0]);
+        
+        if (choice == 2 || choice == JOptionPane.CLOSED_OPTION) {
+            return; // User cancelled
+        }
+        
+        String newStatus = options[choice];
+        
+        // Get the problem and update its status
+        Problem problem = currentProblems.get(selectedRow);
+        problem.setStatus(newStatus);
+        problemService.updateProblem(problem);
+        
+        JOptionPane.showMessageDialog(this, 
+            "Problem removed from review!\nStatus changed to: " + newStatus, 
+            "Success", 
+            JOptionPane.INFORMATION_MESSAGE);
+        
+        // Refresh table to show updated status
+        loadProblems();
     }
     
     // Load Progress Statistics

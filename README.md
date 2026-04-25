@@ -8,15 +8,12 @@ A full-stack Java application to track your competitive programming journey with
 
 ## 📋 Table of Contents
 - [Features](#features)
-- [Screenshots](#screenshots)
 - [Tech Stack](#tech-stack)
 - [Architecture](#architecture)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Database Schema](#database-schema)
 - [Project Structure](#project-structure)
-- [Future Enhancements](#future-enhancements)
-- [Contributing](#contributing)
 - [License](#license)
 
 ## ✨ Features
@@ -42,20 +39,6 @@ A full-stack Java application to track your competitive programming journey with
 - HackerRank
 - CodeChef
 - AtCoder
-
-## 📸 Screenshots
-
-### Main Dashboard
-![Dashboard](screenshots/dashboard.png)
-
-### Add Problem Tab
-![Add Problem](screenshots/add-problem.png)
-
-### View Problems Tab
-![View Problems](screenshots/view-problems.png)
-
-### Progress Statistics
-![Progress](screenshots/progress.png)
 
 ## 🛠️ Tech Stack
 
@@ -109,8 +92,8 @@ A full-stack Java application to track your competitive programming journey with
 
 ### Step 1: Clone Repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/CP_MINI.git
-cd CP_MINI
+git clone https://github.com/QuantumGod007/CP-Progress-Trackerd.git
+cd CP-Progress-Trackerd
 ```
 
 ### Step 2: Setup Database
@@ -119,10 +102,10 @@ cd CP_MINI
 mysql -u root -p
 
 # Run schema
-SOURCE /path/to/CP_MINI/database/schema.sql;
+SOURCE /path/to/CP-Progress-Trackerd/database/schema.sql;
 
 # Load sample data (optional)
-SOURCE /path/to/CP_MINI/database/sample_data.sql;
+SOURCE /path/to/CP-Progress-Trackerd/database/sample_data.sql;
 ```
 
 ### Step 3: Configure Database Connection
@@ -133,15 +116,12 @@ private static final String USERNAME = "root";
 private static final String PASSWORD = "your_password"; // Change this
 ```
 
-### Step 4: Download JDBC Driver
-The MySQL JDBC driver is included in `lib/mysql-connector-j-8.3.0.jar`
-
-### Step 5: Compile
+### Step 4: Compile
 ```bash
-javac -d bin -cp "lib/*" src/com/cptracker/**/*.java
+javac -d bin -cp "lib/*" $(find src -name "*.java")
 ```
 
-### Step 6: Run
+### Step 5: Run
 ```bash
 # GUI Version (Recommended)
 ./run-gui.sh
@@ -172,10 +152,7 @@ java -cp "lib/*:bin" com.cptracker.ui.CPTrackerGUI
 
 #### 3. View Progress
 - Click "Progress" tab
-- See statistics:
-  - Overall Stats (Total Solved, Accuracy)
-  - Streak Information
-  - Difficulty Breakdown
+- See statistics: Total Solved, Accuracy, Streak, Difficulty Breakdown
 - Click "Refresh Statistics" to update
 
 ### Console Version
@@ -229,7 +206,7 @@ updated_at
 ## 📁 Project Structure
 
 ```
-CP_MINI/
+CP-Progress-Trackerd/
 ├── src/
 │   └── com/cptracker/
 │       ├── model/              # Entity classes (POJOs)
@@ -272,51 +249,15 @@ CP_MINI/
 - ✅ **Polymorphism** - Interface-based programming
 - ✅ **SOLID Principles** - Single Responsibility, Dependency Inversion
 
-## 🔮 Future Enhancements
-
-- [ ] User authentication and login system
-- [ ] Automatic streak calculation based on solved dates
-- [ ] Topic/tag-based problem categorization
-- [ ] Export statistics to CSV/PDF
-- [ ] Charts and graphs (JFreeChart integration)
-- [ ] Dark mode toggle
-- [ ] Search and filter functionality
-- [ ] Problem difficulty rating system
-- [ ] Time tracking per problem
-- [ ] Contest performance tracking
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 Author
 
-**Your Name**
-- GitHub: [@YOUR_USERNAME](https://github.com/YOUR_USERNAME)
-- Email: your.email@example.com
-
-## 🙏 Acknowledgments
-
-- Inspired by competitive programming platforms
-- Built as a learning project for Java, JDBC, and MySQL
-- Thanks to the open-source community
-
-## 📞 Support
-
-If you have any questions or issues, please:
-1. Check the [Issues](https://github.com/YOUR_USERNAME/CP_MINI/issues) page
-2. Create a new issue if needed
-3. Contact via email
+**Anvith Shetty**
+- GitHub: [@QuantumGod007](https://github.com/QuantumGod007)
+- Email: anvith320@gmail.com
 
 ---
 
